@@ -1,0 +1,47 @@
+
+T=2;   %Time period
+t = linspace(0,3*T);
+
+
+syms t n 
+syms n integer
+
+
+%Fourier Coefficients 
+a0 = 0.5
+an = 0
+bn = (1-(-1)^n)/(pi*n)
+
+N= 30;
+w=2*pi/T;
+
+F1=symsum(an*cos(n*w*t)+bn*sin(n*w*t),n,1,N);
+F30(t) = (a0)+F1 ;                 %Fourier series representation
+syms t
+t=linspace(0,3*T);
+plot(t,F30(t))                  
+hold on
+
+N= 50;
+
+syms t
+F2=symsum(an*cos(n*w*t)+bn*sin(n*w*t),n,1,N);
+F50(t) = a0+F2 ;                 %Fourier series representation
+t=linspace(0,3*T);
+plot(t,F50(t))                  
+hold on
+
+N= 100;
+
+syms t 
+F1=symsum(an*cos(n*w*t)+bn*sin(n*w*t),n,1,N);
+F100(t) = (a0)+F1 ;                 %Fourier series representation
+t=linspace(0,3*T);
+plot(t,F100(t))                  
+
+grid on;
+legend('N = 30 harnomics','N = 50 harmonics','N = 100 harmonics')
+xlabel('t')
+ylabel('x(t)')
+title('Fourier series representation of x(t)');
+
