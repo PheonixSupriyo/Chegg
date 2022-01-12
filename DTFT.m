@@ -1,28 +1,42 @@
-%F = 0:0.01:10; 
-%H=(0.2)./(1-0.8*exp(-j*2*pi*F));
-%plot(F, abs(H))
-%title('Magnitude plot')
-%xlabel('F')
-Fs = 100
-Ts=1/Fs
-n = -20:1:20;
-x = cos(100.*n);
-stem(n,x)
-%F1=symsum((cos(n)),n,0,3)
-F1=symsum((4.*pi.*cos(n)./(pi*(2*n+1).^2)),n,0,20)
+clc;
+clear all;
+close all;
+h= (1/3)*[1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0];               %Input sequence
+Fk = cdft( h );                 %Function to compute DFT
+N = length(h);                     %Length of sequence xn
+k = 0:N-1;
+subplot(2,1,1)
+stem(k,abs(Fk),'b','linewidth',2)                   %Plotting magnitude of DFT
+xlabel('k')
+grid on
+ylabel('|X(k)|')
+title('Magnitude plot of DFT')
+
+fprintf('DFT of h(n) : \n')
+Fk                     %Command window output to display computed DFT
+
+[H, W] = freqz(h,1,100);
+subplot(2,1,2)
+plot(W,abs(H),'r','linewidth',2)
+grid on;
+title('Magnitude of H(jw)')
+xlabel('w')
+
+clear all
+fun = @(x) x + sin(2*x);
+min=fminbnd(fun,-5,5);
+fprintf('The minimum of the function in interval(-5,5) occurs at x =  %f\n',min);
+fprintf('The minimum value of the function over the interval (-5,5):  %f\n\n',fun(min));
 
 
-%h=0.2.*(0.8).^n.*Ts      
-%y=conv(x,h)           %Convolution
-
-%k=[-20 : 1 : 20]
-%m=dirac(k)
-%idx = m == inf
-%m(idx) = 1
-%y =-2*10^5.*sinc(0.8.*k) + m
-%stem(k,m) %Plotting signal after convolution.
-%hold on
-%stem(k,y)
-%xlabel('n')
-%ylabel('h(n)')
-%title('Impulse Response of HPF')
+syms x
+f = sin(2*x)+x;
+f2 = diff(f,x)==0;
+ep = solve(f2,x);
+ev = subs(f, x, ep);
+[maxX, maxidx] = max(ev);
+mx = ep(maxidx);
+mm = simplify(maxX, 'steps', 50);
+m=double(mm);
+fprintf('The maximum of the function in interval(-5,5) occurs at x =  %f\n',double(mx));
+fprintf('The maximum value of the function over the interval (-5,5):  %f\n\n',m);
